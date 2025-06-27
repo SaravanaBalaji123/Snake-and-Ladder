@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -115,15 +116,32 @@ public class Board {
     }
 
     public int findShortestPath(){
-        int start = 0; int end = size;
+        int start = 0;
         // We can do with overlapping intervals problem, or interval scheduling greedy approach
         // Dfs is not much useful here
         // does all paths < size? no.
         // This can be treated as a graph with each node having neighbours(+1...+6)
         // Special nodes have neighbours across the map.
         // For normal nodes
-
-        return 0;
+        // I am just going do Djikstra's Algorithm
+        int[] distance = new int[size + 1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[start] = 0;
+        for(int index = 0; index < size; index++){
+            for(int jump = 1; jump <= 6 && index + jump <= size; jump++){
+                distance[index+jump] = min(distance[index] + jump, distance[index + jump]);
+            }
+            if(Snakes.containsKey(index)){
+                int tail = Snakes.get(index);
+                distance[tail] = min(distance[tail], distance[index]);
+            }// Index contains a snakes
+            // Comment this out for if you want shortest parth only with ladders.
+            if(Ladders.containsKey(index)){
+                int head = Ladders.get(index);
+                distance[head] = min(distance[head], distance[index]);
+            }// Index contains a Ladder
+        }
+        return distance[size];
     }
 
     public int shortestNumberOfMoves(){

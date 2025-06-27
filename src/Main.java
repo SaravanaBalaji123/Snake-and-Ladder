@@ -45,6 +45,9 @@ public class Main {
             }
         }
 
+        System.out.println("Board Ready!");
+        Board finalBoard = game.getBoard();
+        System.out.println("The minimum path length to complete this course: " + finalBoard.findShortestPath());
         // Create players
         List<Player> players = new ArrayList<>();
 
